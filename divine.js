@@ -3,6 +3,7 @@
 // Author: Vasikokk (@cvasilivg)
 
 
+// Libs
 const Discord = require('discord.js');
 const axios = require('axios');
 const fetch = require('node-fetch');
@@ -10,14 +11,14 @@ const cheerio = require("cheerio");
 const bot = new Discord.Client();
 
 
-// Token from Divine-Pride
-let apiDivinePride = '';
+// Custom config for Divine Asuriel
+const { apiDivine, tokenDiscord } = require('./config.json');
 
 
 // Prefix for command
-let prefixItem = 'a!item'; // len = 7
-let prefixMonster = 'a!monster'; // len = 10
-let prefixVersion = 'a!version'; // len = 10
+let prefixItem = 'a!item';
+let prefixMonster = 'a!monster';
+let prefixVersion = 'a!version';
 
 
 async function getDataItemByID(itemID) {
@@ -49,7 +50,7 @@ async function getDataItemByName(itemName) {
         for (let item of arrayItems) {
             let listArrayItem = item.split('/');
     
-            if (listArrayItem[4] === itemName.replace(/\+/g, '-')) {
+            if (listArrayItem[4] === itemName.replace(' ', '-')) {
                 return await getDataItemByID(listArrayItem[3]);
             };
         }
@@ -88,7 +89,7 @@ async function getDataMonsterByName(monsterName) {
         for (let monster of arrayMonsters) {
             let listArrayMonster = monster.split('/');
     
-            if (listArrayMonster[4] === monsterName.replace(/\+/g, '-')) {
+            if (listArrayMonster[4] === monsterName.replace(' ', '-')) {
                 return await getDataMonsterByID(listArrayMonster[3]);
             };
         }
@@ -139,7 +140,7 @@ bot.on('message', async (msg) => {
 bot.on('message', async (msg) => {
     let username = msg.author.toString();
 
-    let idNameItem = msg.content.slice(7).replace(/\s/g, '+').toLowerCase();
+    let idNameItem = msg.content.slice(7).toLowerCase();
 
     if (msg.content.startsWith(prefixItem)) {
         let dataItem = await getDataItemByName(idNameItem);
@@ -201,7 +202,7 @@ bot.on('message', async (msg) => {
 bot.on('message', async (msg) => {
     let username = msg.author.toString();
 
-    let idNameMonster = msg.content.slice(10).replace(/\s/g, '+').toLowerCase();
+    let idNameMonster = msg.content.slice(10).toLowerCase();
 
     if (msg.content.startsWith(prefixMonster)) {
         let dataMonster = await getDataMonsterByName(idNameMonster);
@@ -240,18 +241,7 @@ bot.on('message', async (msg) => {
             let magicAttackMinimum = magicAttack.minimum;
             let magicAttackMaximum = magicAttack.maximum;
 
-            // Section Monster Drops JSON
-            let monsterDrops = dataMonster.drops;
-
-            // Len Monster Drops { Estoy cansado bro :( }
-            /*let count_monster_drops = Object.keys(monster_drops).length;
-
-            for (let idx_count_monster_drops = 0; idx_count_monster_drops < count_monster_drops; idx_count_monster_drops++) {
-                // Get Item IDs - Drops
-                if (monster_drops[idx_count_monster_drops].serverTypeName === 'Renewal') {
-                    console.log(monster_drops[idx_count_monster_drops]);
-                };
-            }*/
+            // Section Monster Drops JSON (In progress...)
 
             try {
                 await msg.channel.send({
@@ -336,11 +326,11 @@ bot.on('message', async (msg) => {
 });
 
 
+bot.login(tokenDiscord).catch(
+    process.on("unhandledRejection", error => console.error("Promise rejection:", error))
+);
+
+
 bot.once('ready', () => {
 	console.log('Divine Asuriel are now Online!');
 });
-
-
-bot.login('').catch(
-    process.on("unhandledRejection", error => console.error("Promise rejection:", error))
-);
