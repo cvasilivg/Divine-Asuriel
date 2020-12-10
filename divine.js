@@ -22,7 +22,7 @@ let prefixVersion = 'a!version';
 
 
 async function getDataItemByID(itemID) {
-    let urlItemAPI = `https://divine-pride.net/api/database/Item/${itemID}?apiKey=${apiDivinePride}`;
+    let urlItemAPI = `https://divine-pride.net/api/database/Item/${itemID}?apiKey=${apiDivine}`;
     let response = await fetch(urlItemAPI);
     let statusCode = await response.status;
 
@@ -61,7 +61,7 @@ async function getDataItemByName(itemName) {
 
 
 async function getDataMonsterByID(itemID) {
-    let urlItemAPI = `https://divine-pride.net/api/database/Monster/${itemID}?apiKey=${apiDivinePride}`;
+    let urlItemAPI = `https://divine-pride.net/api/database/Monster/${itemID}?apiKey=${apiDivine}`;
     let response = await fetch(urlItemAPI);
     let statusCode = await response.status;
 
